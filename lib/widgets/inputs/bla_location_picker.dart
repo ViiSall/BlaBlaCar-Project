@@ -4,9 +4,12 @@ import 'package:week_3_blabla_project/model/ride/locations.dart';
 import '../../service/locations_service.dart';
 import '../../theme/theme.dart';
 
-//Providing a selected location.
+///
+/// This full-screen modal is in charge of providing (if confirmed) a selected location.
+///
 class BlaLocationPicker extends StatefulWidget {
-  final Location? initLocation;
+  final Location?
+      initLocation; // The picker can be triguer with an existing location name
 
   const BlaLocationPicker({super.key, this.initLocation});
 
@@ -16,6 +19,19 @@ class BlaLocationPicker extends StatefulWidget {
 
 class _BlaLocationPickerState extends State<BlaLocationPicker> {
   List<Location> filteredLocations = [];
+
+  // ----------------------------------
+  // Initialize the Form attributes
+  // ----------------------------------
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.initLocation != null) {
+      filteredLocations = getLocationsFor(widget.initLocation!.name);
+    }
+  }
 
   void onBackSelected() {
     Navigator.of(context).pop();
@@ -30,15 +46,18 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
 
     if (searchText.length > 1) {
       // We start to search from 2 characters only.
-      newSelection = LocationsService.availableLocations
-          .where((location) =>
-              location.name.toUpperCase().contains(searchText.toUpperCase()))
-          .toList();
+      newSelection = getLocationsFor(searchText);
     }
-
     setState(() {
       filteredLocations = newSelection;
     });
+  }
+
+  List<Location> getLocationsFor(String text) {
+    return LocationsService.availableLocations
+        .where((location) =>
+            location.name.toUpperCase().contains(text.toUpperCase()))
+        .toList();
   }
 
   @override
@@ -49,7 +68,7 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
           left: BlaSpacings.m, right: BlaSpacings.m, top: BlaSpacings.s),
       child: Column(
         children: [
-          // Search bar
+          // Top search Search bar
           BlaSearchBar(
             onBackPressed: onBackSelected,
             onSearchChanged: onSearchChanged,
@@ -70,7 +89,7 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
   }
 }
 
-// This tile represents an item in the list of past entered ride inputs
+// This LocationTile
 class LocationTile extends StatelessWidget {
   final Location location;
   final Function(Location location) onSelected;
@@ -79,6 +98,7 @@ class LocationTile extends StatelessWidget {
       {super.key, required this.location, required this.onSelected});
 
   String get title => location.name;
+
   String get subTitle => location.country.name;
 
   @override
@@ -98,6 +118,7 @@ class LocationTile extends StatelessWidget {
   }
 }
 
+// The Search bar combines the search input + the navigation back button
 class BlaSearchBar extends StatefulWidget {
   const BlaSearchBar(
       {super.key, required this.onSearchChanged, required this.onBackPressed});
@@ -116,10 +137,10 @@ class _BlaSearchBarState extends State<BlaSearchBar> {
   bool get searchIsNotEmpty => _controller.text.isNotEmpty;
 
   void onChanged(String newText) {
-    // Notify listener
+    // 1 - Notify the listener
     widget.onSearchChanged(newText);
 
-    // Update the cross icon
+    // 2 - Update the cross icon
     setState(() {});
   }
 
@@ -140,7 +161,6 @@ class _BlaSearchBarState extends State<BlaSearchBar> {
       ),
       child: Row(
         children: [
-          // Left icon
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: IconButton(
@@ -172,7 +192,7 @@ class _BlaSearchBarState extends State<BlaSearchBar> {
                   icon: Icon(Icons.close, color: BlaColors.iconLight),
                   onPressed: () {
                     _controller.clear();
-                    _focusNode.requestFocus();
+                    _focusNode.requestFocus(); // Ensure it stays focused
                     onChanged("");
                   },
                 )
