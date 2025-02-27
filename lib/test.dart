@@ -1,34 +1,56 @@
-import 'package:week_3_blabla_project/service/rides_service.dart';
+import 'package:flutter/material.dart';
+import 'package:week_3_blabla_project/widgets/actions/bla_button.dart';
 
-import 'model/ride/ride.dart';
+import 'theme/theme.dart';
 
 void main() {
-  DateTime today = DateTime.now();
+  runApp(const MyApp());
+}
 
-  // Filter rides for today
-  List<Ride> todayRides = RidesService.availableRides.where((ride) {
-    return ride.departureDate.year == today.year &&
-        ride.departureDate.month == today.month &&
-        ride.departureDate.day == today.day;
-  }).toList();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  // Display the rides
-  print(
-      "Rides available today (${today.toLocal().toIso8601String().split('T').first}):");
-  if (todayRides.isEmpty) {
-    print("No rides available today.");
-  } else {
-    for (var ride in todayRides) {
-      print("""
-Ride:
-  From: ${ride.departureLocation.name}
-  To: ${ride.arrivalLocation.name}
-  Departure: ${ride.departureDate}
-  Arrival: ${ride.arrivalDateTime}
-  Driver: ${ride.driver.firstName} ${ride.driver.lastName}
-  Available Seats: ${ride.availableSeats}
-  Price per Seat: €${ride.pricePerSeat}
-""");
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: appTheme,
+      home: Scaffold(
+          body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BlaButton(
+              type: ButtonType.primary,
+              text: "test primary",
+              onPressed: () {
+                print("test primary");
+              },
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            BlaButton(
+              type: ButtonType.secondary,
+              text: "test secondary",
+              onPressed: () {
+                print('test secondary');
+              },
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            BlaButton(
+              icon: Icons.access_alarm,
+              text: "test primary with icon",
+              onPressed: () {
+                print('test primary with icon');
+              },
+            ),
+          ],
+        ),
+      )),
+    );
   }
 }
