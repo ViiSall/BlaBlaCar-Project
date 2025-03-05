@@ -3,11 +3,13 @@ import 'package:week_3_blabla_project/screens/ride_pref/widgets/ride_pref_input_
 import 'package:week_3_blabla_project/utils/date_time_util.dart';
 import 'package:week_3_blabla_project/widgets/inputs/bla_location_picker.dart';
 
+import '../../../dummy_data/dummy_data.dart';
 import '../../../model/ride/locations.dart';
 import '../../../model/ride_pref/ride_pref.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/actions/bla_button.dart';
 import '../../../widgets/display/bla_divider.dart';
+import '../../ride/ride_screen.dart';
 
 ///
 /// A Ride Preference From is a view to select:
@@ -96,6 +98,26 @@ class _RidePrefFormState extends State<RidePrefForm> {
     });
   }
 
+  void _onSearchPressed() {
+    if (departure != null && arrival != null) {
+      RidePref ridePref = RidePref(
+        departure: departure!,
+        arrival: arrival!,
+        departureDate: departureDate,
+        requestedSeats: requestedSeats,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RidesScreen(
+            ridePref: ridePref,
+            rides: fakeRides,
+          ),
+        ),
+      );
+    }
+  }
+
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
@@ -163,7 +185,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
         ),
 
         // Search BlaButton
-        BlaButton(text: 'Search', onPressed: () {}),
+        BlaButton(text: 'Search', onPressed: _onSearchPressed),
       ],
     );
   }
