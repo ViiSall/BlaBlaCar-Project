@@ -9,6 +9,8 @@ import '../../../model/ride_pref/ride_pref.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/actions/bla_button.dart';
 import '../../../widgets/display/bla_divider.dart';
+import '../../../widgets/inputs/bla_date_picker.dart';
+import '../../../widgets/inputs/seat_number_spinner.dart';
 import '../../ride/ride_screen.dart';
 
 ///
@@ -78,8 +80,6 @@ class _RidePrefFormState extends State<RidePrefForm> {
     // Select a location from BlaLocationPicker
     Location? selectedLocation = await Navigator.of(context).push<Location>(
         MaterialPageRoute(builder: (ctx) => BlaLocationPicker()));
-
-    // Update the form
     if (selectedLocation != null) {
       setState(() {
         arrival = selectedLocation;
@@ -96,6 +96,36 @@ class _RidePrefFormState extends State<RidePrefForm> {
         arrival = Location.copy(temp);
       }
     });
+  }
+
+  void _onDepartureDatePressed() async {
+    DateTime? selectedDate = await Navigator.of(context).push<DateTime>(
+      MaterialPageRoute(
+        builder: (ctx) => BlaDatePicker(
+          initialDate: departureDate,
+        ),
+      ),
+    );
+    if (selectedDate != null) {
+      setState(() {
+        departureDate = selectedDate;
+      });
+    }
+  }
+
+  void _onSeatNumberPressed() async {
+    int? selectedSeats = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder: (ctx) => SeatNumberSpinner(
+          initialValue: 1, // Default number of seats
+        ),
+      ),
+    );
+    if (selectedSeats != null) {
+      setState(() {
+        requestedSeats = selectedSeats;
+      });
+    }
   }
 
   void _onSearchPressed() {
@@ -171,15 +201,14 @@ class _RidePrefFormState extends State<RidePrefForm> {
               RidePrefInputTile(
                   title: dateLabel,
                   leftIcon: Icons.calendar_month,
-                  onPressed: () => {}),
+                  onPressed: _onDepartureDatePressed),
               const BlaDivider(),
 
               // Input the requested number of seats
               RidePrefInputTile(
-                title: numberLabel,
-                leftIcon: Icons.person_2_outlined,
-                onPressed: () => {},
-              )
+                  title: numberLabel,
+                  leftIcon: Icons.person_2_outlined,
+                  onPressed: _onSeatNumberPressed),
             ],
           ),
         ),
