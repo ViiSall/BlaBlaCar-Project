@@ -48,6 +48,7 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
       // We start to search from 2 characters only.
       newSelection = getLocationsFor(searchText);
     }
+
     setState(() {
       filteredLocations = newSelection;
     });
@@ -89,7 +90,9 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
   }
 }
 
-// This LocationTile
+///
+/// This tile represents an item in the list of past entered ride inputs
+///s
 class LocationTile extends StatelessWidget {
   final Location location;
   final Function(Location location) onSelected;
@@ -118,7 +121,10 @@ class LocationTile extends StatelessWidget {
   }
 }
 
-// The Search bar combines the search input + the navigation back button
+///
+///  The Search bar combines the search input + the navigation back button
+///  A clear button appears when search contains some text.
+///
 class BlaSearchBar extends StatefulWidget {
   const BlaSearchBar(
       {super.key, required this.onSearchChanged, required this.onBackPressed});
@@ -137,7 +143,7 @@ class _BlaSearchBarState extends State<BlaSearchBar> {
   bool get searchIsNotEmpty => _controller.text.isNotEmpty;
 
   void onChanged(String newText) {
-    // 1 - Notify the listener
+    // 1 - Notity the listener
     widget.onSearchChanged(newText);
 
     // 2 - Update the cross icon
@@ -161,6 +167,7 @@ class _BlaSearchBarState extends State<BlaSearchBar> {
       ),
       child: Row(
         children: [
+          // Left icon
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: IconButton(

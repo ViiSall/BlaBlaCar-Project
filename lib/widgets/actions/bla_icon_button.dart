@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../theme/theme.dart';
 
+///
+/// Icon Button rendering for the whole application
+///
 class BlaIconButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
@@ -14,9 +17,12 @@ class BlaIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Icon(icon, size: BlaSize.icon, color: BlaColors.primary),
+ 
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Icon(icon, size: BlaSize.icon, color: BlaColors.primary)),
     );
   }
 }
