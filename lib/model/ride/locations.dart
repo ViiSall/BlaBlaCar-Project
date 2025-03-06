@@ -3,6 +3,7 @@
 ///
 enum Country {
   france('France'),
+  cambodia('Cambodia'),
   uk('United Kingdom'),
   spain('Spain');
 
