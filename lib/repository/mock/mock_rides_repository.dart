@@ -1,12 +1,8 @@
 import 'package:week_3_blabla_project/model/ride/locations.dart';
 import 'package:week_3_blabla_project/model/ride/ride.dart';
-
 import 'package:week_3_blabla_project/model/ride/ride_filter.dart';
 import 'package:week_3_blabla_project/model/ride_pref/ride_pref.dart';
 import 'package:week_3_blabla_project/repository/ride_repository.dart';
-
-
-
 import '../../model/user/user.dart';
 
 class MockRidesRepository extends RidesRepository {
@@ -14,7 +10,6 @@ class MockRidesRepository extends RidesRepository {
 
   MockRidesRepository() {
     // FAKE USERS
-
     User kanika = User(firstName: "Kannika");
     User chaylim = User(firstName: "Chaylim");
     User mengtech = User(firstName: "Mengtech");
@@ -22,12 +17,10 @@ class MockRidesRepository extends RidesRepository {
     User sovanda = User(firstName: "Sovanda");
 
     // FAKE LOCATIONS
-
     Location battambang = Location(name: "Battambang", country: Country.cambodia);
     Location siemReap = Location(name: "Siem Reap", country: Country.cambodia);
 
     // FAKE RIDES
-
     Ride ride1 = Ride(
         departureLocation: battambang,
         departureDate: DateTime.now().copyWith(hour: 17, minute: 30),
@@ -85,16 +78,11 @@ class MockRidesRepository extends RidesRepository {
   List<Ride> getRidesFor(RidePreference prefs, RideFilter? filter) {
     return _allRides
         .where((ride) =>
-
             // Filter on departure / arrival
             ride.departureLocation == prefs.departure &&
             ride.arrivalLocation == prefs.arrival &&
-
             // Filter on pets if required
-            (filter != null && filter.onlyPets ? ride.acceptPets : true) &&
-
-            // Filter on rides with available seat only
-            ride.availableSeats > 0)
+            (filter != null && filter.onlyPets ? ride.acceptPets : true))
         .toList();
   }
 }
